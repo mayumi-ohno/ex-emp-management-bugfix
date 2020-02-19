@@ -83,4 +83,20 @@ public class EmployeeRepository {
 		String updateSql = "UPDATE employees SET dependents_count=:dependentsCount WHERE id=:id";
 		template.update(updateSql, param);
 	}
+	
+	/**
+	 * 名前に引数の文字列を含む従業員の情報を取得します.
+	 * @param aPartOfName 名前の一部
+	 * @return　従業員情報
+	 */
+	public List<Employee> findByAPartOfName(String aPartOfName){
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id,name,image,gender,hire_date,mail_address,zip_code,address,");
+		sql.append("telephone,salary,characteristics,dependents_count ");
+		sql.append("FROM employees WHERE name LIKE :aPartOfName; ");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("aPartOfName", "%"+aPartOfName+"%");
+		List<Employee>  developmentList = template.query(sql.toString(), param, EMPLOYEE_ROW_MAPPER);
+		
+		return developmentList;
+	}
 }
