@@ -68,9 +68,10 @@ public class AdministratorController {
 
 	/**
 	 * 確認用パスワードとパスワードが一致するかAjax確認する.
+	 * 
 	 * @param password パスワード
-	 * @param confirmationPassword　確認用パスワード
-	 * @return　JSONオブジェクト
+	 * @param          confirmationPassword 確認用パスワード
+	 * @return JSONオブジェクト
 	 */
 	@ResponseBody
 	@RequestMapping("/pass-check-api")
@@ -100,22 +101,24 @@ public class AdministratorController {
 		if (result.hasErrors()) {
 			return toInsert();
 		}
-		//確認用パスワードとパスワード不一致の場合、エラー
-		if(!form.getPassword().equals(form.getConfirmationPassword())) {
+		
+		Administrator administratorForCheckMail = administratorService.findByMailAddress(form);
+		
+		if(!form.getPassword().equals(form.getConfirmationPassword()) || administratorForCheckMail!=null) {												
+			//確認用パスワードとパスワード不一致の場合、エラー
+			if(!form.getPassword().equals(form.getConfirmationPassword())){
 			String passError = "確認用パスワードが一致しません";
 			model.addAttribute("passDiscord", passError);
-			return toInsert();
-		}
-		
-		//メールアドレスが登録済の場合、エラー
-		List<Administrator> administrators = administratorService.findAll();
-		for(Administrator administrator : administrators) {
-			if(administrator.getMailAddress().equals(form.getMailAddress())){
+			}
+			//メールアドレスが登録済の場合、エラー
+			if(  administratorForCheckMail!=null ){
 				String mailError = "このメールアドレスは既に登録されています";
 				model.addAttribute("mailError", mailError);
 				return toInsert();
 			}
+			return toInsert();
 		}
+		
 		
 		Administrator administrator = new Administrator();
 		// フォームからドメインにプロパティ値をコピー

@@ -1,12 +1,12 @@
 package jp.co.sample.emp_management.service;
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jp.co.sample.emp_management.domain.Administrator;
+import jp.co.sample.emp_management.form.InsertAdministratorForm;
 import jp.co.sample.emp_management.repository.AdministratorRepository;
 
 /**
@@ -22,10 +22,6 @@ public class AdministratorService {
 	@Autowired
 	private AdministratorRepository administratorRepository;
 	
-	public List<Administrator> findAll(){
-		return administratorRepository.findAll();
-	}
-
 	/**
 	 * 管理者情報を登録します.
 	 * 
@@ -44,5 +40,9 @@ public class AdministratorService {
 	public Administrator login(String mailAddress, String passward) {
 		Administrator administrator = administratorRepository.findByMailAddressAndPassward(mailAddress, passward);
 		return administrator;
+	}
+	
+	public Administrator findByMailAddress(InsertAdministratorForm form) {
+		return administratorRepository.findByMailAddress(form.getMailAddress());
 	}
 }
