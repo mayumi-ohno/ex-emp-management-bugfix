@@ -96,9 +96,11 @@ public class AdministratorController {
 	 */
 	@RequestMapping("/insert")
 	public String insert(@Validated InsertAdministratorForm form, BindingResult result, Model model) {
+		
 		if (result.hasErrors()) {
 			return toInsert();
 		}
+		//確認用パスワードとパスワード不一致の場合、エラー
 		if(!form.getPassword().equals(form.getConfirmationPassword())) {
 			String passError = "確認用パスワードが一致しません";
 			model.addAttribute("passDiscord", passError);
