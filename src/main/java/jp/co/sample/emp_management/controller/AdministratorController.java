@@ -110,7 +110,7 @@ public class AdministratorController {
 		//メールアドレスが登録済の場合、エラー
 		List<Administrator> administrators = administratorService.findAll();
 		for(Administrator administrator : administrators) {
-			if(!administrator.getMailAddress().equals(form.getMailAddress())){
+			if(administrator.getMailAddress().equals(form.getMailAddress())){
 				String mailError = "このメールアドレスは既に登録されています";
 				model.addAttribute("mailError", mailError);
 				return toInsert();
