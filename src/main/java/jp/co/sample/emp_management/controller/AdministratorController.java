@@ -1,7 +1,6 @@
 package jp.co.sample.emp_management.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -11,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,8 +70,8 @@ public class AdministratorController {
 	/**
 	 * 確認用パスワードとパスワードが一致するかAjax確認する.
 	 * 
-	 * @param password パスワード
-	 * @param          confirmationPassword 確認用パスワード
+	 * @param password             パスワード
+	 * @param confirmationPassword 確認用パスワード
 	 * @return JSONオブジェクト
 	 */
 	@ResponseBody
@@ -97,29 +98,27 @@ public class AdministratorController {
 	 */
 	@RequestMapping("/insert")
 	public String insert(@Validated InsertAdministratorForm form, BindingResult result, Model model) {
-		
+
 		if (result.hasErrors()) {
 			return toInsert();
 		}
-		
+
 		Administrator administratorForCheckMail = administratorService.findByMailAddress(form);
-		
-		if(!form.getPassword().equals(form.getConfirmationPassword()) || administratorForCheckMail!=null) {												
-			//確認用パスワードとパスワード不一致の場合、エラー
-			if(!form.getPassword().equals(form.getConfirmationPassword())){
-			String passError = "確認用パスワードが一致しません";
-			model.addAttribute("passDiscord", passError);
+
+		if (!form.getPassword().equals(form.getConfirmationPassword()) || administratorForCheckMail != null) {
+			// 確認用パスワードとパスワード不一致の場合、エラー
+			if (!form.getPassword().equals(form.getConfirmationPassword())) {
+				FieldError passError = new FieldError(result.getObjectName(), "password", "確認用パスワードが一致しません");
+				result.addError(passError);
 			}
-			//メールアドレスが登録済の場合、エラー
-			if(  administratorForCheckMail!=null ){
-				String mailError = "このメールアドレスは既に登録されています";
-				model.addAttribute("mailError", mailError);
-				return toInsert();
+			// メールアドレスが登録済の場合、エラー
+			if (administratorForCheckMail != null) {
+				FieldError mailError = new FieldError(result.getObjectName(), "mailAddress", "メールアドレスが登録済です");
+				result.addError(mailError);
 			}
 			return toInsert();
 		}
-		
-		
+
 		Administrator administrator = new Administrator();
 		// フォームからドメインにプロパティ値をコピー
 		BeanUtils.copyProperties(form, administrator);
