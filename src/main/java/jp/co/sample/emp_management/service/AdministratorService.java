@@ -1,5 +1,7 @@
 package jp.co.sample.emp_management.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,10 @@ public class AdministratorService {
 	
 	@Autowired
 	private AdministratorRepository administratorRepository;
+	
+	public List<Administrator> findAll(){
+		return administratorRepository.findAll();
+	}
 
 	/**
 	 * 管理者情報を登録します.

@@ -35,6 +35,16 @@ public class AdministratorRepository {
 
 	@Autowired
 	private NamedParameterJdbcTemplate template;
+	
+	/**
+	 * 管理者情報を全件取得します.
+	 * @return 管理者情報一覧
+	 */
+	public List<Administrator> findAll(){
+		String sql ="SELECT id,name,mail_address,password FROM administrators;";
+		List<Administrator> administrators = template.query(sql,ADMINISTRATOR_ROW_MAPPER);
+		return administrators;
+	}
 
 	/**
 	 * メールアドレスとパスワードから管理者情報を取得します.

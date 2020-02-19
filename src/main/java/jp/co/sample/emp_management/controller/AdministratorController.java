@@ -1,6 +1,7 @@
 package jp.co.sample.emp_management.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -14,7 +15,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jp.co.sample.emp_management.domain.Administrator;
 import jp.co.sample.emp_management.form.InsertAdministratorForm;
@@ -105,6 +105,16 @@ public class AdministratorController {
 			String passError = "確認用パスワードが一致しません";
 			model.addAttribute("passDiscord", passError);
 			return toInsert();
+		}
+		
+		//メールアドレスが登録済の場合、エラー
+		List<Administrator> administrators = administratorService.findAll();
+		for(Administrator administrator : administrators) {
+			if(!administrator.getMailAddress().equals(form.getMailAddress())){
+				String mailError = "このメールアドレスは既に登録されています";
+				model.addAttribute("mailError", mailError);
+				return toInsert();
+			}
 		}
 		
 		Administrator administrator = new Administrator();
