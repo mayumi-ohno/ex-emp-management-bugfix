@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jp.co.sample.emp_management.domain.Administrator;
 import jp.co.sample.emp_management.form.InsertAdministratorForm;
@@ -66,7 +67,7 @@ public class AdministratorController {
 	}
 
 	/**
-	 * 確認用パスワードとパスワードが一致するか確認する.
+	 * 確認用パスワードとパスワードが一致するかAjax確認する.
 	 * @param password パスワード
 	 * @param confirmationPassword　確認用パスワード
 	 * @return　JSONオブジェクト
@@ -81,7 +82,7 @@ public class AdministratorController {
 		} else if (password.equals(confirmationPassword)) {
 			map.put("duplicateMessage", "確認パスワードOK!");
 		} else {
-			map.put("duplicateMessage", "パスワードが一致しせん");
+			map.put("duplicateMessage", "パスワードが一致しません");
 		}
 
 		return map;
@@ -94,10 +95,16 @@ public class AdministratorController {
 	 * @return ログイン画面へリダイレクト
 	 */
 	@RequestMapping("/insert")
-	public String insert(@Validated InsertAdministratorForm form, BindingResult result) {
+	public String insert(@Validated InsertAdministratorForm form, BindingResult result, Model model) {
 		if (result.hasErrors()) {
 			return toInsert();
 		}
+		if(!form.getPassword().equals(form.getConfirmationPassword())) {
+			String passError = "確認用パスワードが一致しません";
+			model.addAttribute("passDiscord", passError);
+			return toInsert();
+		}
+		
 		Administrator administrator = new Administrator();
 		// フォームからドメインにプロパティ値をコピー
 		BeanUtils.copyProperties(form, administrator);
