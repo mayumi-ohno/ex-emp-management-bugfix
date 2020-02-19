@@ -79,6 +79,18 @@
 									</div>
 								</div>
 							</div>
+							<!--確認用 パスワード -->
+							<div class="form-group">
+								<div class="row">
+									<div class="col-sm-12">
+										<label for="confirmationPassword">
+											パスワード（もう1度入力してください）:
+										</label>
+										<div id="duplicateMessage" style="color:red"></div>
+										<input type="password" name="confirmationPassword" id="confirmationPassword" class="form-control" placeholder="password">
+									</div>
+								</div>
+							</div>
 							<!-- 登録ボタン -->
 							<div class="form-group">
 								<div class="row">
@@ -100,6 +112,7 @@
 	<!-- end container -->
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script src="../../static/js/bootstrap.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/check-password.js"></script>
 </body>
 </html>
