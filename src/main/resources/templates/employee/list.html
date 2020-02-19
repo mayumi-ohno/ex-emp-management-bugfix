@@ -92,6 +92,16 @@
 								<span th:text="${employee.dependentsCount} + '人'">3人</span>
 							</td>
 						</tr>
+						<tr>
+							<td colspan="3">
+								<form  th:action="@{/employee/showList}" method="post">
+									ページ：
+									<span th:each="pageNumber:${pageNumbers}">
+										<button name="index" th:value="${pageNumber}-1" th:text="${pageNumber}"></button>
+									</span>
+								</form>
+							</td>
+						</tr>
 					</tbody>
 				</table>
 
