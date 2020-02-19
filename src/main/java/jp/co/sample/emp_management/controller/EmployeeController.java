@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jp.co.sample.emp_management.domain.Employee;
 import jp.co.sample.emp_management.form.UpdateEmployeeForm;
@@ -129,6 +130,21 @@ public class EmployeeController {
 		Employee employee = employeeService.showDetail(Integer.parseInt(id));
 		model.addAttribute("employee", employee);
 		return "employee/detail";
+	}
+	
+	/**
+	 * JQueryに従業員名のリストを返す.
+	 * @return 従業員名一覧（JSON）
+	 */
+	@ResponseBody
+	@RequestMapping("/auto-complete-api")
+	public List<String> autoCompleteApi(){
+		List<Employee> allEmployees = employeeService.showList();
+		List<String> employeeNames = new ArrayList<>();
+		for(Employee employee : allEmployees) {
+			employeeNames.add(employee.getName());
+		}
+		return employeeNames;
 	}
 
 	/////////////////////////////////////////////////////
