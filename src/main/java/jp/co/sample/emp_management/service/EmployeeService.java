@@ -21,17 +21,17 @@ public class EmployeeService {
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
-	
+
 	/**
 	 * 従業員情報を全件取得します.
 	 * 
-	 * @return　従業員情報一覧
+	 * @return 従業員情報一覧
 	 */
 	public List<Employee> showList() {
 		List<Employee> employeeList = employeeRepository.findAll();
 		return employeeList;
 	}
-	
+
 	/**
 	 * 従業員情報を取得します.
 	 * 
@@ -43,22 +43,35 @@ public class EmployeeService {
 		Employee employee = employeeRepository.load(id);
 		return employee;
 	}
-	
+
 	/**
 	 * 従業員情報を更新します.
 	 * 
-	 * @param employee　更新した従業員情報
+	 * @param employee 更新した従業員情報
 	 */
 	public void update(Employee employee) {
 		employeeRepository.update(employee);
 	}
-	
-	/**名前に引数の文字列を含む従業員の情報を取得します.
+
+	/**
+	 * 名前に引数の文字列を含む従業員の情報を取得します.
+	 * 
 	 * @param aPartOfName 名前の一部
-	 * @return　従業員情報
+	 * @return 従業員情報
 	 */
 	public List<Employee> findByAPartOfName(String aPartOfName) {
 		List<Employee> employeeList = employeeRepository.findByAPartOfName(aPartOfName);
 		return employeeList;
+	}
+
+	/**
+	 * * ２つの引数の範囲内のデータを取得する.
+	 * 
+	 * @param topOfData    一番先頭のデータ番号
+	 * @param buttomOfData 最後尾のデータ番号
+	 * @return 従業員一覧
+	 */
+	public List<Employee> findLimited(Integer topOfData) {
+		return employeeRepository.findLimited(topOfData);
 	}
 }

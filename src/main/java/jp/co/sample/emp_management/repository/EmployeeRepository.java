@@ -58,6 +58,26 @@ public class EmployeeRepository {
 	}
 
 	/**
+	 * 引数データ番号から10件目のデータまで、合計10件の従業員情報を取得する.
+	 * 
+	 * @param topOfData 一番先頭のデータ番号
+	 * @param           buttomOfData 最後尾のデータ番号
+	 * @return 従業員一覧
+	 */
+	public List<Employee> findLimited(Integer topOfData) {
+		StringBuilder sql = new StringBuilder();
+		sql.append(
+				"SELECT id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count");
+		sql.append(" FROM employees ORDER BY hire_date DESC");
+		sql.append(" LIMIT 10 OFFSET :topOfData;");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("topOfData", topOfData);
+
+		List<Employee> developmentList = template.query(sql.toString(), param, EMPLOYEE_ROW_MAPPER);
+
+		return developmentList;
+	}
+
+	/**
 	 * 主キーから従業員情報を取得します.
 	 * 
 	 * @param id 検索したい従業員ID
@@ -83,20 +103,21 @@ public class EmployeeRepository {
 		String updateSql = "UPDATE employees SET dependents_count=:dependentsCount WHERE id=:id";
 		template.update(updateSql, param);
 	}
-	
+
 	/**
 	 * 名前に引数の文字列を含む従業員の情報を取得します.
+	 * 
 	 * @param aPartOfName 名前の一部
-	 * @return　従業員情報
+	 * @return 従業員情報
 	 */
-	public List<Employee> findByAPartOfName(String aPartOfName){
+	public List<Employee> findByAPartOfName(String aPartOfName) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT id,name,image,gender,hire_date,mail_address,zip_code,address,");
 		sql.append("telephone,salary,characteristics,dependents_count ");
 		sql.append("FROM employees WHERE name LIKE :aPartOfName; ");
-		SqlParameterSource param = new MapSqlParameterSource().addValue("aPartOfName", "%"+aPartOfName+"%");
-		List<Employee>  developmentList = template.query(sql.toString(), param, EMPLOYEE_ROW_MAPPER);
-		
+		SqlParameterSource param = new MapSqlParameterSource().addValue("aPartOfName", "%" + aPartOfName + "%");
+		List<Employee> developmentList = template.query(sql.toString(), param, EMPLOYEE_ROW_MAPPER);
+
 		return developmentList;
 	}
 }

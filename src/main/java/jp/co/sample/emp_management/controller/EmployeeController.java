@@ -68,21 +68,17 @@ public class EmployeeController {
 		}
 		model.addAttribute("pageNumbers", pageNumbers);
 		
-		//初回表示時はリスト0-9番目の従業員情報（10件）を表示する
+		//初回表示時はDBの1番目～10件分の従業員情報（10件）を表示する
 		if(index==null) {
-			List<Employee> employeeList = allEmployees.subList(0, 10);
+			List<Employee> employeeList = employeeService.findLimited(0);
 			model.addAttribute("employeeList", employeeList);
 			return "employee/list";
 		}
 		
-		//リストから、インデックス番号×10番目～10件分の従業員情報を切り出す
-		//【例】インデックス番号が2の場合：リストの20-29番目の従業員情報を表示
-		Integer numOfTopData = index*10;
-		Integer numOfButtomData = numOfTopData + 10;
-		if(numOfButtomData >=  allEmployees.size()) {
-			numOfButtomData = allEmployees.size();
-		}
-		List<Employee> employeeList = allEmployees.subList(numOfTopData, numOfButtomData);
+		//ページ送り時は、引数のインデックス番号×10番目～10件分の従業員情報を切り出す
+		//【例】インデックス番号が2の場合：リストの21-30番目の従業員情報を表示
+		Integer topOfData = index*10;
+		List<Employee> employeeList = employeeService.findLimited(topOfData);
 		model.addAttribute("employeeList", employeeList);
 		
 		return "employee/list";
