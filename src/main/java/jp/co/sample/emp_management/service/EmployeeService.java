@@ -31,6 +31,14 @@ public class EmployeeService {
 		List<Employee> employeeList = employeeRepository.findAll();
 		return employeeList;
 	}
+	
+	/**
+	 * 従業員情報のデータ数を取得します.
+	 * @return データ数
+	 */
+	public Integer dataCount() {
+		return employeeRepository.dataCount();
+	}
 
 	/**
 	 * 従業員情報を取得します.

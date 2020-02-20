@@ -50,15 +50,15 @@ public class EmployeeController {
 	 */
 	@RequestMapping("/showList")
 	public String showList(Model model, Integer index) {
-		List<Employee> allEmployees = employeeService.showList();
-
+		
 		//従業員情報を10件/1ページ表示するときの総ページ数を算出
+		Integer dataCount = employeeService.dataCount();
 		Integer dataPerPage = 10;
 		Integer totalPage;
-		if (allEmployees.size() % dataPerPage == 0) {
-			totalPage = allEmployees.size() / dataPerPage;
+		if (dataCount % dataPerPage == 0) {
+			totalPage = dataCount / dataPerPage;
 		} else {
-			totalPage = allEmployees.size() / dataPerPage + 1;
+			totalPage = dataCount / dataPerPage + 1;
 		}
 		
 		//ページ番号のリストを作成

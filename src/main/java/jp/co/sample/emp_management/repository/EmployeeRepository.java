@@ -60,8 +60,8 @@ public class EmployeeRepository {
 	/**
 	 * 引数データ番号から10件目のデータまで、合計10件の従業員情報を取得する.
 	 * 
-	 * @param topOfData 一番先頭のデータ番号
-	 * @param           buttomOfData 最後尾のデータ番号
+	 * @param topOfData    一番先頭のデータ番号
+	 * @param buttomOfData 最後尾のデータ番号
 	 * @return 従業員一覧
 	 */
 	public List<Employee> findLimited(Integer topOfData) {
@@ -75,6 +75,18 @@ public class EmployeeRepository {
 		List<Employee> developmentList = template.query(sql.toString(), param, EMPLOYEE_ROW_MAPPER);
 
 		return developmentList;
+	}
+
+	/**
+	 * 従業員情報のデータ数を取得します.
+	 * 
+	 * @return データ数
+	 */
+	public Integer dataCount() {
+		String sql = "SELECT COUNT(id) FROM employees;";
+		SqlParameterSource param = new MapSqlParameterSource();
+		Integer count = template.queryForObject(sql, param, Integer.class);
+		return count;
 	}
 
 	/**
