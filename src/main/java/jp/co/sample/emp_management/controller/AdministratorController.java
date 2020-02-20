@@ -163,6 +163,12 @@ public class AdministratorController {
 	@RequestMapping("/login")
 	public String login(LoginForm form, Model model) {
 
+		// 入力欄空欄の場合、エラーとする
+		if ("".equals(form.getMailAddress()) || "".equals(form.getPassword())) {
+			model.addAttribute("errorMessage", "メールアドレスとパスワードを入力してください。");
+			return toLogin();
+		}
+
 		// メールアドレスで管理者情報検索し、DB上のハッシュ化されたパスワードを取得する
 		Administrator administrator = administratorService.findByMailAddress(form);
 		String encodeInDb = administrator.getPassword();
