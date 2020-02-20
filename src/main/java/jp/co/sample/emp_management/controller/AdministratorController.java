@@ -98,23 +98,21 @@ public class AdministratorController {
 	@RequestMapping("/insert")
 	public String insert(@Validated InsertAdministratorForm form, BindingResult result, Model model) {
 
-		if (result.hasErrors()) {
-			return toInsert();
-		}
-
 		Administrator administratorForCheckMail = administratorService.findByMailAddress(form);
 
-		if (!form.getPassword().equals(form.getConfirmationPassword()) || administratorForCheckMail != null) {
-			// 確認用パスワードとパスワード不一致の場合、エラー
-			if (!form.getPassword().equals(form.getConfirmationPassword())) {
-				FieldError passError = new FieldError(result.getObjectName(), "password", "確認用パスワードが一致しません");
-				result.addError(passError);
-			}
-			// メールアドレスが登録済の場合、エラー
-			if (administratorForCheckMail != null) {
-				FieldError mailError = new FieldError(result.getObjectName(), "mailAddress", "メールアドレスが登録済です");
-				result.addError(mailError);
-			}
+		// 確認用パスワードとパスワード不一致の場合、エラー
+		if (!form.getPassword().equals(form.getConfirmationPassword())) {
+			FieldError passError = new FieldError(result.getObjectName(), "password", "確認用パスワードが一致しません");
+			result.addError(passError);
+		}
+		// メールアドレスが登録済の場合、エラー
+		if (administratorForCheckMail != null) {
+			FieldError mailError = new FieldError(result.getObjectName(), "mailAddress", "メールアドレスが登録済です");
+			result.addError(mailError);
+		}
+
+		// １つでもエラーがあれば登録画面に戻る
+		if (result.hasErrors()) {
 			return toInsert();
 		}
 

@@ -97,16 +97,11 @@ public class EmployeeController {
 	 */
 	@RequestMapping("/search-employee")
 	public String searchEmployee(String aPartOfName, Model model) {
-		// 検索フォーム空欄でボタンを押した場合は全件出力
-		if (aPartOfName == null) {
-			return "foward:/employee/showList";
-		}
 
 		List<Employee> employeeList = employeeService.findByAPartOfName(aPartOfName);
 
 		// 該当情報なしの場合はメッセージ出力・従業員情報全件出力
 		if (employeeList.size() == 0) {
-			model.addAttribute("employeeList", employeeList);
 			model.addAttribute("nothingHit", "１件もありませんでした");
 			return "forward:/employee/showList";
 		}
