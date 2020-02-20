@@ -76,7 +76,7 @@ public class EmployeeController {
 		}
 		
 		//ページ送り時は、引数のインデックス番号×10番目～10件分の従業員情報を切り出す
-		//【例】インデックス番号が2の場合：リストの21-30番目の従業員情報を表示
+		//【例】インデックス番号が2の場合：DB上の20-29番目の従業員情報を表示
 		Integer topOfData = index*10;
 		List<Employee> employeeList = employeeService.findLimited(topOfData);
 		model.addAttribute("employeeList", employeeList);
