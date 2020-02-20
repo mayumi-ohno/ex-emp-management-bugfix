@@ -161,13 +161,13 @@ public class AdministratorController {
 	 * @return ログイン後の従業員一覧画面
 	 */
 	@RequestMapping("/login")
-	public String login(LoginForm form, BindingResult result, Model model) {
+	public String login(LoginForm form, Model model) {
 
 		// メールアドレスで管理者情報検索し、DB上のハッシュ化されたパスワードを取得する
 		Administrator administrator = administratorService.findByMailAddress(form);
 		String encodeInDb = administrator.getPassword();
 
-		// DB上のハッシュ化パスワードとフォームから来たハッシュ化パスワードを照合する
+		// DB上のハッシュ化パスワードとフォームから来た平文パスワードを照合する
 		if (passwordEncoder.matches(form.getPassword(), encodeInDb)) {
 			// 一致した場合、名前をセッションに格納のうえ従業員情報一覧画面へ
 			session.setAttribute("administratorName", administrator.getName());
