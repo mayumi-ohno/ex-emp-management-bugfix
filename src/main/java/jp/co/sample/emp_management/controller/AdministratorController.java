@@ -7,6 +7,9 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,6 +39,14 @@ public class AdministratorController {
 
 	@Autowired
 	private HttpSession session;
+
+	@Autowired
+	PasswordEncoder passwordEncoder;
+
+	@Bean
+	PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
 	/**
 	 * 使用するフォームオブジェクトをリクエストスコープに格納する.
@@ -117,8 +128,14 @@ public class AdministratorController {
 		}
 
 		Administrator administrator = new Administrator();
+		// パスワードを暗号化
+		BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
+		String encode = bcrypt.encode(form.getPassword());
 		// フォームからドメインにプロパティ値をコピー
+		// パスワードは暗号化したものを代入
 		BeanUtils.copyProperties(form, administrator);
+		administrator.setPassword(encode);
+
 		administratorService.insert(administrator);
 		return "redirect:/";
 	}
@@ -145,13 +162,21 @@ public class AdministratorController {
 	 */
 	@RequestMapping("/login")
 	public String login(LoginForm form, BindingResult result, Model model) {
-		Administrator administrator = administratorService.login(form.getMailAddress(), form.getPassword());
-		if (administrator == null) {
+
+		// メールアドレスで管理者情報検索し、DB上のハッシュ化されたパスワードを取得する
+		Administrator administrator = administratorService.findByMailAddress(form);
+		String encodeInDb = administrator.getPassword();
+
+		// DB上のハッシュ化パスワードとフォームから来たハッシュ化パスワードを照合する
+		if (passwordEncoder.matches(form.getPassword(), encodeInDb)) {
+			// 一致した場合、名前をセッションに格納のうえ従業員情報一覧画面へ
+			session.setAttribute("administratorName", administrator.getName());
+			return "forward:/employee/showList";
+		} else {
 			model.addAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
 			return toLogin();
 		}
-		session.setAttribute("administratorName", administrator.getName());
-		return "forward:/employee/showList";
+
 	}
 
 	/////////////////////////////////////////////////////

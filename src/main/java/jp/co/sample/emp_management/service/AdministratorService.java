@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jp.co.sample.emp_management.domain.Administrator;
 import jp.co.sample.emp_management.form.InsertAdministratorForm;
+import jp.co.sample.emp_management.form.LoginForm;
 import jp.co.sample.emp_management.repository.AdministratorRepository;
 
 /**
@@ -42,7 +43,21 @@ public class AdministratorService {
 		return administrator;
 	}
 	
+	/**
+	 * メールアドレスで従業員情報を検索・取得する.
+	 * @param form 従業員情報
+	 * @return　従業員情報
+	 */
 	public Administrator findByMailAddress(InsertAdministratorForm form) {
+		return administratorRepository.findByMailAddress(form.getMailAddress());
+	}
+	
+	/**
+	 * メールアドレスで従業員情報を検索・取得する.
+	 * @param form 従業員情報
+	 * @return　従業員情報
+	 */
+	public Administrator findByMailAddress(LoginForm form) {
 		return administratorRepository.findByMailAddress(form.getMailAddress());
 	}
 }

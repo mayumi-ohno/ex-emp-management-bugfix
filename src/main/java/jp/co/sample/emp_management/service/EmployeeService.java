@@ -73,10 +73,9 @@ public class EmployeeService {
 	}
 
 	/**
-	 * * ２つの引数の範囲内のデータを取得する.
+	 * 引数データ番号から10件目のデータまで、合計10件の従業員情報を取得する.
 	 * 
 	 * @param topOfData    一番先頭のデータ番号
-	 * @param buttomOfData 最後尾のデータ番号
 	 * @return 従業員一覧
 	 */
 	public List<Employee> findLimited(Integer topOfData) {
