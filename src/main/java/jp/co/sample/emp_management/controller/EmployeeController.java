@@ -176,4 +176,8 @@ public class EmployeeController {
 		employeeService.update(employee);
 		return "redirect:/employee/showList";
 	}
+	
+	/////////////////////////////////////////////////////
+	// ユースケース：従業員詳細を更新する
+	/////////////////////////////////////////////////////
 }

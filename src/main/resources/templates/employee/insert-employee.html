@@ -38,8 +38,6 @@
 					id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
 						<li class="active"><a href="list.html" th:href="@{/employee/showList}">従業員管理</a></li>
-						<li>&nbsp;&nbsp;</li>
-						<li class="active"><a href="list.html" th:href="@{/employee/showList}">従業員登録</a></li>
 					</ul>
 					<p class="navbar-text navbar-right">
 					   <span th:text="${session.administratorName}">山田太郎</span>さんこんにちは！
@@ -55,7 +53,6 @@
 		<!-- パンくずリスト -->
 		<ol class="breadcrumb">
 			<li><a th:href="@{/employee/showList}">従業員リスト</a></li>
-			<li class="active">従業員詳細</li>
 		</ol>
 		
 		<!-- register form -->
@@ -70,16 +67,16 @@
 
 <!-- ここにモックのform要素を貼り付けます -->
 
-					<form method="post" action="list.html" th:action="@{/employee/update}" th:object="${updateEmployeeForm}">
+					<form method="post" action="list.html" th:action="@{/employee/insert}" th:object="${insertEmployeeForm}">
 						<fieldset>
-							<legend>従業員情報</legend>
+							<legend>従業員情報登録</legend>
 							<table class="table table-striped">
 							  <tr>
 							    <th nowrap>
 							      従業員名
 							    </th>
 							    <td>
-							     <span th:text="${employee.name}">山田花子</span>
+							    <input type="text" name="name">
 							    </td>
 							  </tr>
 							  <tr>
