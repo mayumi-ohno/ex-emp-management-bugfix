@@ -150,9 +150,6 @@ public class AdministratorController {
 	 */
 	@RequestMapping("/")
 	public String toLogin() {
-//		if (error == 1) {
-//			model.addAttribute("errorMessage", "メールアドレスとパスワードを入力してください。");
-//		}
 		return "administrator/login";
 	}
 

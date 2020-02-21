@@ -3,7 +3,10 @@ package jp.co.sample.emp_management.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,7 +15,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import jp.co.sample.emp_management.domain.Administrator;
 import jp.co.sample.emp_management.domain.Employee;
+import jp.co.sample.emp_management.domain.LoginUser;
 import jp.co.sample.emp_management.form.UpdateEmployeeForm;
 import jp.co.sample.emp_management.service.EmployeeService;
 
@@ -28,6 +33,9 @@ public class EmployeeController {
 
 	@Autowired
 	private EmployeeService employeeService;
+
+	@Autowired
+	private HttpSession session;
 
 	/**
 	 * 使用するフォームオブジェクトをリクエストスコープに格納する.
@@ -49,9 +57,13 @@ public class EmployeeController {
 	 * @return 従業員一覧画面
 	 */
 	@RequestMapping("/showList")
-	public String showList(Model model, Integer index) {
-		
-		//従業員情報を10件/1ページ表示するときの総ページ数を算出
+	public String showList(Model model, Integer index, @AuthenticationPrincipal LoginUser loginUser) {
+
+		//ログインユーザー名をセッションスコープに格納
+		Administrator administrator = loginUser.getUser();
+		session.setAttribute("administratorName", administrator.getName());
+
+		// 従業員情報を10件/1ページ表示するときの総ページ数を算出
 		Integer dataCount = employeeService.dataCount();
 		Integer dataPerPage = 10;
 		Integer totalPage;
@@ -60,27 +72,27 @@ public class EmployeeController {
 		} else {
 			totalPage = dataCount / dataPerPage + 1;
 		}
-		
-		//ページ番号のリストを作成
+
+		// ページ番号のリストを作成
 		List<Integer> pageNumbers = new ArrayList<>();
-		for(int i =1; i <= totalPage; i++) {
+		for (int i = 1; i <= totalPage; i++) {
 			pageNumbers.add(i);
 		}
 		model.addAttribute("pageNumbers", pageNumbers);
-		
-		//初回表示時はDBの1番目～10件分の従業員情報（10件）を表示する
-		if(index==null) {
+
+		// 初回表示時はDBの1番目～10件分の従業員情報（10件）を表示する
+		if (index == null) {
 			List<Employee> employeeList = employeeService.findLimited(0);
 			model.addAttribute("employeeList", employeeList);
 			return "employee/list";
 		}
-		
-		//ページ送り時は、引数のインデックス番号×10番目～10件分の従業員情報を切り出す
-		//【例】インデックス番号が2の場合：DB上の20-29番目の従業員情報を表示
-		Integer topOfData = index*10;
+
+		// ページ送り時は、引数のインデックス番号×10番目～10件分の従業員情報を切り出す
+		// 【例】インデックス番号が2の場合：DB上の20-29番目の従業員情報を表示
+		Integer topOfData = index * 10;
 		List<Employee> employeeList = employeeService.findLimited(topOfData);
 		model.addAttribute("employeeList", employeeList);
-		
+
 		return "employee/list";
 	}
 
@@ -122,17 +134,18 @@ public class EmployeeController {
 		model.addAttribute("employee", employee);
 		return "employee/detail";
 	}
-	
+
 	/**
 	 * JQueryに従業員名のリストを返す.
+	 * 
 	 * @return 従業員名一覧（JSON）
 	 */
 	@ResponseBody
 	@RequestMapping("/auto-complete-api")
-	public List<String> autoCompleteApi(){
+	public List<String> autoCompleteApi() {
 		List<Employee> allEmployees = employeeService.showList();
 		List<String> employeeNames = new ArrayList<>();
-		for(Employee employee : allEmployees) {
+		for (Employee employee : allEmployees) {
 			employeeNames.add(employee.getName());
 		}
 		return employeeNames;
