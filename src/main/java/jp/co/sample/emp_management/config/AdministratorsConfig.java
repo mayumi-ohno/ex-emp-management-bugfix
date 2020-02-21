@@ -12,15 +12,15 @@ class DAdministratorsConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 				//ログイン前にアクセス可とするファイル群
 				.mvcMatchers("/").permitAll()
-				.mvcMatchers("/css/style.css").permitAll()
-				.mvcMatchers("/css/bootstrap.css").permitAll()
-				.mvcMatchers("/img/e1.png").permitAll()
-				.mvcMatchers("/img/e2.png").permitAll()
-				.mvcMatchers("/img/header_logo_small.png").permitAll()
-				.mvcMatchers("/img/header_logo.png").permitAll()
-//				// 上記以外のファイルは、ログイン以前のアクセス不可とする
+				.mvcMatchers("/toInsert").permitAll()
+				.mvcMatchers("/insert").permitAll()
+				.mvcMatchers("/pass-check-api").permitAll()
+				.mvcMatchers("/css/**").permitAll()
+				.mvcMatchers("/img/**").permitAll()
+				.mvcMatchers("/js/**").permitAll()
+////				// 上記以外のファイルは、ログイン以前のアクセス不可とする
 //				.anyRequest().authenticated().and()
-//				// LOGIN
+////				// LOGIN
 //				.formLogin()
 //				.loginPage("/employee/showList")
 //				.defaultSuccessUrl("/employee/showList")
