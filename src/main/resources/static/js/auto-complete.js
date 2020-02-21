@@ -6,7 +6,7 @@ $(function(){
 	
 	$.ajax({
 		url : hostUrl,
-		type : 'POST',
+		type : 'GET',
 		dataType : 'json',
 		async: true // 非同期で処理を行う
 	}).done(function(data) {
