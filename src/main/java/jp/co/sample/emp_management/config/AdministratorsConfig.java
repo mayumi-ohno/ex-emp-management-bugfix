@@ -15,6 +15,7 @@ class DAdministratorsConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 				// ログイン前にアクセス可とするファイル群
 				.mvcMatchers("/").permitAll()
+				.mvcMatchers("/failure").permitAll()
 				.mvcMatchers("/toInsert").permitAll()
 				.mvcMatchers("/insert").permitAll()
 				.mvcMatchers("/pass-check-api").permitAll()
@@ -27,7 +28,7 @@ class DAdministratorsConfig extends WebSecurityConfigurerAdapter {
 		http.formLogin()
 				.loginProcessingUrl("/login")
 				.loginPage("/")
-				.failureUrl("/?error=1")
+				.failureUrl("/failure")
 				.defaultSuccessUrl("/employee/showList", true)
 				.usernameParameter("mailAddress")
 				.passwordParameter("password").and()

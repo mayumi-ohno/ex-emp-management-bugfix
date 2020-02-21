@@ -152,7 +152,17 @@ public class AdministratorController {
 	public String toLogin() {
 		return "administrator/login";
 	}
-
+	
+	/**
+	 * ログイン失敗の場合、ログインメッセージを表示します.
+	 * 
+	 * @return ログイン画面
+	 */
+	@RequestMapping("/failure")
+	public String failure(Model model) {
+		model.addAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
+		return "administrator/login";
+	}
 	/**
 	 * ログインします.
 	 * 
