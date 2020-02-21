@@ -150,6 +150,9 @@ public class AdministratorController {
 	 */
 	@RequestMapping("/")
 	public String toLogin() {
+//		if (error == 1) {
+//			model.addAttribute("errorMessage", "メールアドレスとパスワードを入力してください。");
+//		}
 		return "administrator/login";
 	}
 
@@ -160,30 +163,26 @@ public class AdministratorController {
 	 * @param result エラー情報格納用オブッジェクト
 	 * @return ログイン後の従業員一覧画面
 	 */
-	@RequestMapping("/login")
-	public String login(LoginForm form, Model model) {
-
-		// 入力欄空欄の場合、エラーとする
-		if ("".equals(form.getMailAddress()) || "".equals(form.getPassword())) {
-			model.addAttribute("errorMessage", "メールアドレスとパスワードを入力してください。");
-			return toLogin();
-		}
-
-		// メールアドレスで管理者情報検索し、DB上のハッシュ化されたパスワードを取得する
-		Administrator administrator = administratorService.findByMailAddress(form);
-		String encodeInDb = administrator.getPassword();
-
-		// DB上のハッシュ化パスワードとフォームから来た平文パスワードを照合する
-		if (passwordEncoder.matches(form.getPassword(), encodeInDb)) {
-			// 一致した場合、名前をセッションに格納のうえ従業員情報一覧画面へ
-			session.setAttribute("administratorName", administrator.getName());
-			return "forward:/employee/showList";
-		} else {
-			model.addAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
-			return toLogin();
-		}
-
-	}
+	/*
+	 * @RequestMapping("/login") public String login(LoginForm form, Model model) {
+	 * 
+	 * // 入力欄空欄の場合、エラーとする if ("".equals(form.getMailAddress()) ||
+	 * "".equals(form.getPassword())) { model.addAttribute("errorMessage",
+	 * "メールアドレスとパスワードを入力してください。"); return toLogin(); }
+	 * 
+	 * // メールアドレスで管理者情報検索し、DB上のハッシュ化されたパスワードを取得する Administrator administrator =
+	 * administratorService.findByMailAddress(form); String encodeInDb =
+	 * administrator.getPassword();
+	 * 
+	 * // DB上のハッシュ化パスワードとフォームから来た平文パスワードを照合する if
+	 * (passwordEncoder.matches(form.getPassword(), encodeInDb)) { //
+	 * 一致した場合、名前をセッションに格納のうえ従業員情報一覧画面へ session.setAttribute("administratorName",
+	 * administrator.getName()); return "forward:/employee/showList"; } else {
+	 * model.addAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。"); return
+	 * toLogin(); }
+	 * 
+	 * }
+	 */
 
 	/////////////////////////////////////////////////////
 	// ユースケース：ログアウトをする
