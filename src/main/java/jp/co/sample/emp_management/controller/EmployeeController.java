@@ -59,7 +59,7 @@ public class EmployeeController {
 	@RequestMapping("/showList")
 	public String showList(Model model, Integer index, @AuthenticationPrincipal LoginUser loginUser) {
 
-		//ログインユーザー名をセッションスコープに格納
+		// ログインユーザー名をセッションスコープに格納
 		Administrator administrator = loginUser.getUser();
 		session.setAttribute("administratorName", administrator.getName());
 
@@ -107,6 +107,11 @@ public class EmployeeController {
 	public String searchEmployee(String aPartOfName, Model model) {
 
 		List<Employee> employeeList = employeeService.findByAPartOfName(aPartOfName);
+
+		// フォーム空欄の場合、従業員情報全件出力
+		if ("".equals(aPartOfName)) {
+			return "forward:/employee/showList";
+		}
 
 		// 該当情報なしの場合はメッセージ出力・従業員情報全件出力
 		if (employeeList.size() == 0) {
