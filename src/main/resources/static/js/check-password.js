@@ -7,7 +7,7 @@ $(function(){
 
 		$.ajax({
 			url: hostUrl,
-			type: "POST",
+			type: "GET",
 			dataType: "json",
 			data:{
 				password: password ,

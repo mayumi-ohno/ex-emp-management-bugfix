@@ -67,7 +67,7 @@
 
 <!-- ここにモックのform要素を貼り付けます -->
 
-					<form method="post" action="list.html" th:action="@{/employee/insert}" th:object="${insertEmployeeForm}">
+					<form method="post" action="list.html" th:action="@{/employee/insert}" th:object="${employeeForm}" enctype=”multipart/form-data”>
 						<fieldset>
 							<legend>従業員情報登録</legend>
 							<table class="table table-striped">
@@ -84,7 +84,7 @@
 							      写真
 							    </th>
 							    <td>
-							      <img src="../../static/img/e2.png" th:src="${'/img/' + employee.image}" />
+							    <input type="file" name="image" size="30" value="" id="uploadImage"/>
 							    </td>
 							  </tr>
 							  <tr>
@@ -92,7 +92,10 @@
 							      性別
 							    </th>
 							    <td>
-							      <span th:text="${employee.gender}">女性</span>
+							    <select name="gender" style="width:120px">
+							    	<option value="男性">男性</option>
+							    	<option value="女性">女性</option>
+							    </select>
 							    </td>
 							  </tr>
 							  <tr>
@@ -100,7 +103,7 @@
 							      入社日
 							    </th>
 							    <td>
-							      <span th:text="${#dates.format(employee.hireDate,'yyyy年MM月dd日')}">2012/11/29</span>
+							    	<input type="date" name="hireDate">
 							    </td>
 							  </tr>
 							  <tr>
@@ -108,7 +111,7 @@
 							      メールアドレス
 							    </th>
 							    <td>
-							      <span th:text="${employee.mailAddress}">yamada@sample.com</span>
+							     <input type="email" name="mailAddress">
 							    </td>
 							  </tr>
 							  <tr>
@@ -116,7 +119,7 @@
 							      郵便番号
 							    </th>
 							    <td>
-							      <span th:text="${employee.zipCode}">111-1111</span>
+							     <input type="text" name="zipCode">
 							    </td>
 							  </tr>
 							  <tr>
@@ -124,7 +127,7 @@
 							      住所
 							    </th>
 							    <td>
-							      <span th:text="${employee.address}">東京都新宿区1-1-1</span>
+							     <input type="text" name="address">
 							    </td>
 							  </tr>
 							  <tr>
@@ -132,7 +135,7 @@
 							      電話番号
 							    </th>
 							    <td>
-							      <span th:text="${employee.telephone}">090-0000-0000</span>
+							     <input type="text" name="telephone">
 							    </td>
 							  </tr>
 							  <tr>
@@ -140,7 +143,7 @@
 							      給料
 							    </th>
 							    <td>
-							      <span th:text="${#numbers.formatInteger(employee.salary,1,'COMMA') + '円'}">400000円</span>
+							     <input type="text" name="salary">
 							    </td>
 							  </tr>
 							  <tr>
@@ -148,7 +151,7 @@
 							      特性
 							    </th>
 							    <td>
-							      <span th:text="${employee.characteristics}">明るく素直な性格です。リーダーシップを発揮します。新卒社員研修の時はグループ開発の時にリーダーを買ってでました。積極性も人間性も抜群です。周りに対する不満も聞いたことがありません。</span>
+							     <textarea name="characteristics" rows="5" cols="50px"></textarea>
 							    </td>
 							  </tr>
 							  <tr>
@@ -156,13 +159,7 @@
 							      扶養人数
 							    </th>
 							    <td>
-							    	<label th:if="${#fields.hasErrors('dependentsCount')}" th:errors="*{dependentsCount}" class="error-messages">
-											扶養人数を入力してください
-									</label>
-									<label class="control-label" style="color: red" for="dependentsCount"></label>
-									<input type="hidden" name="id" th:value="${employee.id}">
-									<input type="text" name="dependentsCount" id="dependentsCount" class="form-control" value="3"
-										 th:errorclass="error-input" th:value="${employee.dependentsCount}">
+							     <input type="text" name="dependentsCount">
 							    </td>
 							  </tr>
 							</table>

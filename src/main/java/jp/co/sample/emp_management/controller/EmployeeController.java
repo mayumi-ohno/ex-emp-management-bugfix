@@ -13,11 +13,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import jp.co.sample.emp_management.domain.Administrator;
 import jp.co.sample.emp_management.domain.Employee;
 import jp.co.sample.emp_management.domain.LoginUser;
+import jp.co.sample.emp_management.form.EmployeeForm;
 import jp.co.sample.emp_management.form.UpdateEmployeeForm;
 import jp.co.sample.emp_management.service.EmployeeService;
 
@@ -36,6 +38,11 @@ public class EmployeeController {
 
 	@Autowired
 	private HttpSession session;
+	
+	@ModelAttribute
+	public EmployeeForm setUpInsetForm() {
+		return new EmployeeForm();
+	}
 
 	/**
 	 * 使用するフォームオブジェクトをリクエストスコープに格納する.
@@ -178,6 +185,17 @@ public class EmployeeController {
 	}
 	
 	/////////////////////////////////////////////////////
-	// ユースケース：従業員詳細を更新する
+	// ユースケース：従業員情報を登録する
 	/////////////////////////////////////////////////////
+	@RequestMapping("/to-insert-employee")
+	public String toInsertEmoployeePage() {
+		return "employee/insert-employee";
+	}
+	
+	@RequestMapping("/insert")
+	public String insertEmployee(EmployeeForm employeeForm, Model model) {
+		model.addAttribute("originalFilename", employeeForm.getImage());
+		System.out.println(employeeForm);
+		return "forward:/employee/showList";
+	}
 }
